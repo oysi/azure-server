@@ -1,0 +1,19 @@
+{
+  "name": "azure-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oysi/azure-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oysi/azure-server/issues"
+  },
+  "homepage": "https://github.com/oysi/azure-server#readme"
+}
