@@ -15,3 +15,7 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
 });
+
+app.listen(443, () => {
+	console.log(`Listenign on port 443...`);
+});
