@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "echo build done",
     "test": "echo test done",
     "start": "node ./index.js"
   },
