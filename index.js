@@ -19,3 +19,7 @@ app.listen(port, () => {
 app.listen(443, () => {
 	console.log(`Listenign on port 443...`);
 });
+
+app.listen(8080, () => {
+	console.log("Listening on port 8080...");
+});
