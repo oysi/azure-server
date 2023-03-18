@@ -42,7 +42,15 @@ const config = {
 	}
 }
 
-console.log(config);
+
+app.get("/newgame", (req, res) => {
+	const userID = req.query.userID;
+	if (userID) {
+		res.status(200).send(`Everything is fine! ${userID}`);
+	} else {
+		res.status(400).json({message: "Bad request"});
+	}
+});
 
 
 app.get("/", (req, res) => {
