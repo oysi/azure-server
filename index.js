@@ -84,6 +84,24 @@ app.get("/newgame", async (req, res) => {
 	}
 });
 
+app.get("/game/:code", async (req, res) => {
+	try {
+		const code = req.params.code;
+		
+		const pool = await sql.connect(config);
+		const result = await pool.request().query(`
+			SELECT
+				*
+			FROM tbl_Minesweeper_Games
+			WHERE Code = '${code}'
+		`);
+		
+		res.status(200).json(result.recordset[0]);
+	} catch (err) {
+		res.status(500).send("invalid");
+	}
+});
+
 
 // app.get("/", (req, res) => {
 // 	res.send("Hello, World!");
