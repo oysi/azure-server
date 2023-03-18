@@ -10,11 +10,16 @@ require("dotenv").config();
 const sql = require("mssql");
 
 const express = require("express");
+
+const cors = require("cors");
 // const session = require("express-session");
 
 const app = express();
 // const port = 3000;
 const port = 8080;
+
+
+app.use(cors());
 
 
 // app.use(
