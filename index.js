@@ -43,22 +43,47 @@ const config = {
 }
 
 
-app.get("/newgame", (req, res) => {
+app.get("/newgame", async (req, res) => {
 	const userID = req.query.userID;
 	if (userID) {
-		res.status(200).send(`Everything is fine! ${userID}`);
+		try {
+			const code = crypto.randomUUID();
+			
+			let board = "";
+			for (let y = 0; y < 16; y++) {
+				for (let x = 0; x < 24; x++) {
+					if (Math.random() <= 0.1) {
+						board += "1";
+					} else {
+						board += "0";
+					}
+				}
+				board += ";";
+			}
+			
+			const pool = await sql.connect(config);
+			const result = await pool.request().input("UserID", userID).input("Code", code).input("Board", board).execute("stp_Minesweeper_NewGame");
+			
+			console.log("result", result);
+			
+			res.status(200).json({Code: result.recordset[0].Code});
+		} catch (err) {
+			console.log("error", err);
+			res.status(500).send(err);
+		}
 	} else {
-		res.status(400).json({message: "Bad request"});
+		console.log("bad request");
+		res.status(400).send("Bad request");
 	}
 });
 
 
-app.get("/", (req, res) => {
-	res.send("Hello, World!");
-	sql.connect(config).then(connection => {
-		console.log("connected"); 
-	});
-});
+// app.get("/", (req, res) => {
+// 	res.send("Hello, World!");
+// 	sql.connect(config).then(connection => {
+// 		console.log("connected"); 
+// 	});
+// });
 
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
