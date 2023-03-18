@@ -31,11 +31,11 @@ app.listen(8080, () => {
 console.log(process.env.ENV_VAR);
 
 const config = {
-    user: 'username', // better stored in an app setting such as process.env.DB_USER
-    password: 'password', // better stored in an app setting such as process.env.DB_PASSWORD
-    server: 'your_server.database.windows.net', // better stored in an app setting such as process.env.DB_SERVER
+    user: process.env.DB_USER, // better stored in an app setting such as process.env.DB_USER
+    password: process.env.DB_PASSWORD, // better stored in an app setting such as process.env.DB_PASSWORD
+    server: process.env.DB_SERVER, // better stored in an app setting such as process.env.DB_SERVER
     port: 1433, // optional, defaults to 1433, better stored in an app setting such as process.env.DB_PORT
-    database: 'AdventureWorksLT', // better stored in an app setting such as process.env.DB_NAME
+    database: process.env.DB_NAME, // better stored in an app setting such as process.env.DB_NAME
     authentication: {
         type: 'default'
     },
