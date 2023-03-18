@@ -3,6 +3,8 @@ console.log("Hello, World!");
 
 console.log("done");
 
+require("dotenv").config();
+
 const mssql = require("mssql");
 
 const express = require("express");
@@ -28,7 +30,6 @@ app.listen(8080, () => {
 
 
 
-console.log(process.env.ENV_VAR);
 
 const config = {
     user: process.env.DB_USER, // better stored in an app setting such as process.env.DB_USER
