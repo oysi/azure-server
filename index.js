@@ -3,6 +3,8 @@ console.log("Hello, World!");
 
 console.log("done");
 
+const crypto = require("crypto");
+
 require("dotenv").config();
 
 const sql = require("mssql");
