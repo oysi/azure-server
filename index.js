@@ -14,6 +14,8 @@ const express = require("express");
 const cors = require("cors");
 // const session = require("express-session");
 
+const { ExpressPeerServer } = require("peer");
+
 const app = express();
 // const port = 3000;
 const port = 8080;
@@ -86,17 +88,47 @@ app.get("/newgame", async (req, res) => {
 
 app.get("/game/:code", async (req, res) => {
 	try {
-		const code = req.params.code;
+		const userID = req.query.userID;
+		if (!userID) {
+			console.error("invalid userID");
+		}
 		
+		const code = req.params.code;
+		if (!code) {
+			console.error("invalid code");
+		}
+		
+		const result = {};
+		
+		// get game info
 		const pool = await sql.connect(config);
-		const result = await pool.request().query(`
+		const result_game = await pool.request().query(`
 			SELECT
 				*
 			FROM tbl_Minesweeper_Games
 			WHERE Code = '${code}'
 		`);
 		
-		res.status(200).json(result.recordset[0]);
+		result.ID = result_game.recordset[0].ID;
+		result.Code = result_game.recordset[0].Code;
+		result.Board = result_game.recordset[0].Board;
+		
+		// join game
+		await pool.request().input("Game_ID", result.ID).input("User_ID", userID).execute("stp_Minesweeper_JoinGame");
+		
+		// get users in game
+		const result_users = await pool.request().query(`
+			SELECT
+				*
+			FROM tbl_Minesweeper_GamesUsers
+			WHERE Game_ID = ${result.ID}
+		`);
+		
+		result.users = result_users.recordset.map(e => e.User_ID);
+		
+		console.log("result", result);
+		
+		res.status(200).json(result);
 	} catch (err) {
 		res.status(500).send("invalid");
 	}
@@ -110,8 +142,30 @@ app.get("/game/:code", async (req, res) => {
 // 	});
 // });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
 });
 
 
+
+
+
+
+
+// WebRTC
+// const server = app.listen(9000);
+
+const peerServer = ExpressPeerServer(server, {
+	path: "/myapp",
+});
+
+app.use("/peerjs", peerServer);
+
+peerServer.on("connection", (client) => {
+	// console.log("connection", client);
+	console.log("connection", client.id);
+});
+peerServer.on("disconnect", (client) => {
+	// console.log("connection", client);
+	console.log("disconnect", client.id);
+});
